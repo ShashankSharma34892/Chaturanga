@@ -1,0 +1,8 @@
+:root {
+  --main-background: #f2ecd7;
+  --main-font: #19181f;
+  --board-border: #1c1e38;
+  --tile-white: #edecd8;
+  --tile-black: #3b4554;
+  --tile-selected: #b4befe;
+}

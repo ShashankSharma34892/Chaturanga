@@ -1,0 +1,322 @@
+@import "./Styles/pastely.css";
+
+:root {
+  --board-size: 630px;
+  --border: 4px;
+  --bordius: 6px;
+}
+
+#root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 0.9rem;
+
+  background: var(--main-background);
+  color: var(--main-font);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.board-container {
+  width: var(--board-size);
+  height: var(--board-size);
+
+  border: solid 1px var(--board-border);
+  border-radius: var(--bordius);
+
+  display: grid;
+  grid-template-columns: 50px 1fr 50px;
+  grid-template-rows: 50px 1fr 50px;
+
+  box-shadow:
+    rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  box-shadow:
+    rgba(0, 0, 0, 0.6) 0px 2px 4px,
+    rgba(0, 0, 0, 0.5) 0px 7px 13px -3px,
+    rgba(0, 0, 0, 0.4) 0px -3px 0px inset;
+
+  transition: transform 0.2s;
+  will-change: transform;
+}
+
+.sidemarkings {
+  font-weight: 1000;
+  display: grid;
+
+  &.top,
+  &.bottom {
+    grid-template-columns: repeat(8, 1fr);
+  }
+  &.left,
+  &.right {
+    grid-template-rows: repeat(8, 1fr);
+  }
+  &.top {
+    grid-row: 1;
+    grid-column: 2;
+  }
+  &.right {
+    grid-row: 2;
+    grid-column: 3;
+  }
+  &.left {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  &.bottom {
+    grid-row: 3;
+    grid-column: 2;
+  }
+}
+.marking {
+  font-size: 1.1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board {
+  grid-row: 2;
+  grid-column: 2;
+
+  border: solid var(--border) var(--board-border);
+  border-radius: calc(var(--bordius) + 1px);
+
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+
+  overflow: hidden;
+
+  /*box-shadow:
+    rgba(0, 0, 0, 0.12) 0px 1px 6px,
+    rgba(0, 0, 0, 0.24) 0px 1px 4px;*/
+}
+
+.tile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.white {
+    background: var(--tile-white);
+  }
+  &.black {
+    background: var(--tile-black);
+  }
+
+  &.selected {
+    box-shadow: inset #a6e3a1 0px 0px 12px 4px;
+  }
+
+  &.target {
+    box-shadow: inset #b4befe 0px 0px 10px 3px;
+  }
+
+  &.capture {
+    box-shadow: inset #f38ba8 0px 0px 12px 4px;
+  }
+}
+
+.last-move {
+  outline: 3px solid rgba(255, 215, 0, 0.7);
+  outline-offset: -3px;
+}
+
+.piece {
+  width: 70%;
+  height: auto;
+  pointer-events: none;
+}
+
+img[col="White"] {
+  filter: drop-shadow(0 0 3px black);
+}
+img[col="Black"] {
+  filter: drop-shadow(0 0 3px white);
+}
+
+.crown {
+  width: 65px;
+  height: auto;
+  padding: 1px 4px 1px;
+  border: solid 2px var(--board-border);
+  border-radius: var(--bordius);
+
+  cursor: pointer;
+  perspective: 1200px;
+  will-change: transform;
+
+  transition: transform 0.3s ease-in-out;
+
+  img {
+    transition:
+      transform 0.3s ease-in-out,
+      filter 0.3s ease-out;
+  }
+}
+.crown.White {
+  filter: drop-shadow(0px 4px 2px #00000070);
+
+  img {
+    filter: invert(1);
+    transform: rotateY(180deg);
+  }
+}
+.crown.Black {
+  filter: drop-shadow(0px 4px 2px #00000070);
+
+  img {
+    filter: none;
+  }
+}
+
+.display {
+  width: 14rem;
+  height: 26rem;
+  border: 1px solid var(--board-border);
+  border-radius: var(--bordius);
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+
+  & .role-label {
+    font-weight: bold;
+    border-bottom: 2px solid var(--board-border);
+  }
+}
+
+.display {
+  display: grid;
+
+  &.log {
+    grid-template-rows: 3rem 1fr;
+  }
+  &.capture {
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+.black-capture,
+.white-capture {
+  display: grid;
+}
+
+.white-capture {
+  border-top: 2px solid var(--board-border);
+  grid-template-rows: 1fr auto;
+}
+.black-capture {
+  grid-template-rows: auto 1fr;
+}
+
+.wcap,
+.bcap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.white-heading,
+.black-heading {
+  padding: 0.7rem;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.white-heading {
+  border-top: 2px solid var(--board-border);
+}
+.black-heading {
+  border-bottom: 2px solid var(--board-border);
+}
+
+.role-label,
+.chapi,
+.papi,
+.whose-turn-is-it-anyway,
+.b {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.whose-turn-is-it-anyway {
+  width: 100%;
+  gap: 0.85rem;
+  flex-direction: column;
+}
+
+.papi {
+  gap: 4rem;
+  transition: transform 0.2s;
+  will-change: transform;
+}
+
+.chapi {
+  gap: 1.5rem;
+  flex-direction: column;
+}
+
+.flipped,
+.flipped .marking,
+.flipped .tile {
+  rotate: 180deg;
+}
+
+.cap-piece {
+  width: 30px;
+  height: auto;
+  pointer-events: none;
+}
+
+.display-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.status-line {
+  font-weight: bold;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.move-log-wrapper {
+  overflow-y: auto;
+
+  /* 1. Force the scroll to snap to lines */
+  scroll-snap-type: y mandatory;
+  /* 2. smooth scrolling looks nicer with auto-scroll */
+  scroll-behavior: smooth;
+}
+
+.move-log {
+  margin: 0;
+  /* 3. Add padding to bottom so the last item has space */
+  padding: 0.5rem 1.7rem 1rem 1.7rem;
+  list-style-position: inside;
+  list-style-type: disc;
+  font-size: 0.8rem;
+}
+
+.log-line {
+  padding: 0.17rem 0;
+  /* 4. Tell the wrapper where to snap (start of the element) */
+  scroll-snap-align: start;
+}
+
+li {
+  list-style: disc outside none;
+}
